@@ -1,0 +1,55 @@
+2022-02-21 23:18:33.928  INFO 13792 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 13792 (started by Lucky in E:\Java\community)
+2022-02-21 23:18:33.932 DEBUG 13792 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:18:33.932  INFO 13792 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:18:35.483  INFO 13792 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:18:35.864  INFO 13792 --- [main] com.zwm.MailClient                       : Started MailClient in 2.157 seconds (JVM running for 2.917)
+2022-02-21 23:19:41.283  INFO 10624 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 10624 (started by Lucky in E:\Java\community)
+2022-02-21 23:19:41.284 DEBUG 10624 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:19:41.284  INFO 10624 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:19:42.607  INFO 10624 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:19:42.961  INFO 10624 --- [main] com.zwm.MailClient                       : Started MailClient in 1.907 seconds (JVM running for 2.704)
+2022-02-21 23:20:16.202  INFO 5712 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 5712 (started by Lucky in E:\Java\community)
+2022-02-21 23:20:16.203 DEBUG 5712 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:20:16.204  INFO 5712 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:20:17.569  INFO 5712 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:20:17.914  INFO 5712 --- [main] com.zwm.MailClient                       : Started MailClient in 1.925 seconds (JVM running for 2.698)
+2022-02-21 23:20:48.754  INFO 36912 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 36912 (started by Lucky in E:\Java\community)
+2022-02-21 23:20:48.755 DEBUG 36912 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:20:48.756  INFO 36912 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:20:50.244  INFO 36912 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:20:50.619  INFO 36912 --- [main] com.zwm.MailClient                       : Started MailClient in 2.077 seconds (JVM running for 2.83)
+2022-02-21 23:26:37.108  INFO 19588 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 19588 (started by Lucky in E:\Java\community)
+2022-02-21 23:26:37.109 DEBUG 19588 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:26:37.109  INFO 19588 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:26:38.422  INFO 19588 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:26:38.752  INFO 19588 --- [main] com.zwm.MailClient                       : Started MailClient in 1.875 seconds (JVM running for 2.614)
+2022-02-21 23:27:07.927  INFO 6116 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 6116 (started by Lucky in E:\Java\community)
+2022-02-21 23:27:07.928 DEBUG 6116 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:27:07.928  INFO 6116 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:27:09.187  INFO 6116 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:27:09.492  INFO 6116 --- [main] com.zwm.MailClient                       : Started MailClient in 1.759 seconds (JVM running for 2.501)
+2022-02-21 23:27:27.377  INFO 33420 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 33420 (started by Lucky in E:\Java\community)
+2022-02-21 23:27:27.378 DEBUG 33420 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:27:27.378  INFO 33420 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:27:28.703  INFO 33420 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:27:29.018  INFO 33420 --- [main] com.zwm.MailClient                       : Started MailClient in 1.84 seconds (JVM running for 2.563)
+2022-02-21 23:28:02.708  INFO 5704 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 5704 (started by Lucky in E:\Java\community)
+2022-02-21 23:28:02.709 DEBUG 5704 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:28:02.709  INFO 5704 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:28:04.091  INFO 5704 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:28:04.448  INFO 5704 --- [main] com.zwm.MailClient                       : Started MailClient in 1.931 seconds (JVM running for 2.657)
+2022-02-21 23:45:59.968  INFO 26244 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 26244 (started by Lucky in E:\Java\community)
+2022-02-21 23:45:59.969 DEBUG 26244 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:45:59.969  INFO 26244 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:46:01.130  INFO 26244 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:46:01.424  INFO 26244 --- [main] com.zwm.MailClient                       : Started MailClient in 1.632 seconds (JVM running for 2.317)
+2022-02-21 23:46:20.957  INFO 31588 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 31588 (started by Lucky in E:\Java\community)
+2022-02-21 23:46:20.958 DEBUG 31588 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:46:20.958  INFO 31588 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:46:22.129  INFO 31588 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:46:22.415  INFO 31588 --- [main] com.zwm.MailClient                       : Started MailClient in 1.64 seconds (JVM running for 2.326)
+2022-02-21 23:52:37.060  INFO 11640 --- [main] com.zwm.MailClient                       : Starting MailClient using Java 1.8.0_321 on LAPTOP-NQ9C5ISN with PID 11640 (started by Lucky in E:\Java\community)
+2022-02-21 23:52:37.061 DEBUG 11640 --- [main] com.zwm.MailClient                       : Running with Spring Boot v2.6.3, Spring v5.3.15
+2022-02-21 23:52:37.061  INFO 11640 --- [main] com.zwm.MailClient                       : No active profile set, falling back to default profiles: default
+2022-02-21 23:52:38.273  INFO 11640 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2022-02-21 23:52:38.577  INFO 11640 --- [main] com.zwm.MailClient                       : Started MailClient in 1.726 seconds (JVM running for 2.414)
