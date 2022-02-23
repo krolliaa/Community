@@ -18,14 +18,11 @@ public interface UserMapper {
     public abstract int insertUser(User user);
 
     //更新用户状态
-    public abstract int updateUserStatus(int id, int status);
+    public abstract int updateUserStatus(int id);
 
     //更新用户头像
     public abstract int updateUserHeader(int id, String headUrl);
 
     //更新用户密码
     public abstract int updateUserPassword(int id, String password);
-
-    //查询激活码是否正确
-    public abstract User selectUserByIdAndActivationCode(int id, String activationCode);
 }

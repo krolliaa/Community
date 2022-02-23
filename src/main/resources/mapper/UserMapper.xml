@@ -37,19 +37,19 @@
         #{createTime})
     </insert>
 
-    <update id="updateStatus">
+    <update id="updateUserStatus">
         update user
-        set status = #{status}
+        set status = 1
         where id = #{id}
     </update>
 
-    <update id="updateHeader">
+    <update id="updateUserHeader">
         update user
         set header_url = #{headerUrl}
         where id = #{id}
     </update>
 
-    <update id="updatePassword">
+    <update id="updateUserPassword">
         update user
         set password = #{password}
         where id = #{id}

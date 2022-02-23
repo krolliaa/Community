@@ -3,6 +3,7 @@ package com.zwm.service.impl;
 import com.zwm.dao.UserMapper;
 import com.zwm.entity.User;
 import com.zwm.service.UserService;
+import com.zwm.util.CommunityConstant;
 import com.zwm.util.CommunityUtils;
 import com.zwm.util.MailServer;
 import org.apache.commons.lang3.StringUtils;
@@ -17,11 +18,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import static com.zwm.util.CommunityConstant.*;
+
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
 
     @Value("${community.path.domain}")
     private String domain;
@@ -108,5 +112,20 @@ public class UserServiceImpl implements UserService {
         String content = templateEngine.process("/mail/activation", context);
         mailServer.sendMessage(user.getEmail(), "激活账号", content);
         return map;
+    }
+
+    @Override
+    public CommunityConstant activation(int id, String activationCode) {
+        User user = userMapper.selectUserById(id);
+        if (user.getStatus() == 1) {
+            return ACTIVATION_REPEAT;
+        } else if (user.getStatus() == 0 && user.getActivationCode().equals(activationCode)) {
+            //只有状态为 0 即未激活并且激活码跟链接相同才准许激活
+            int result = userMapper.updateUserStatus(id);
+            if(result == 1) return ACTIVATION_SUCCESS;
+            else return ACTIVATION_FAILURE;
+        } else {
+            return ACTIVATION_FAILURE;
+        }
     }
 }

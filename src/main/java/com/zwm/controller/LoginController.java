@@ -2,6 +2,7 @@ package com.zwm.controller;
 
 import com.zwm.entity.User;
 import com.zwm.service.impl.UserServiceImpl;
+import com.zwm.util.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Map;
 
+import static com.zwm.util.CommunityConstant.ACTIVATION_FAILURE;
+import static com.zwm.util.CommunityConstant.ACTIVATION_SUCCESS;
+
 @Controller
 public class LoginController {
 
@@ -18,8 +22,13 @@ public class LoginController {
     private UserServiceImpl userService;
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String getLoginPage() {
+    public String getRegisterPage() {
         return "/site/register";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String getLoginPage() {
+        return "/site/login";
     }
 
     //注册功能
@@ -39,5 +48,22 @@ public class LoginController {
             model.addAttribute("emailMsg", map.get("emailMsg"));
             return "/site/register";
         }
+    }
+
+    //激活码激活
+    @RequestMapping(value = "/activation/{id}/{code}")
+    public String activeCode(Model model, @PathVariable("id") int id, @PathVariable("code") String code) {
+        CommunityConstant communityConstant = userService.activation(id, code);
+        if (communityConstant == ACTIVATION_FAILURE) {
+            model.addAttribute("msg", "激活失败,您提供的激活码不正确!");
+            model.addAttribute("target", "/index");//跳转返回首页
+        } else if (communityConstant == ACTIVATION_SUCCESS) {
+            model.addAttribute("msg", "激活成功,您的账号已经可以正常使用了!");
+            model.addAttribute("target", "/login");
+        } else {
+            model.addAttribute("msg", "无效操作,该账号已经激活过了!");
+            model.addAttribute("target", "/index");//跳转返回首页
+        }
+        return "/site/operate-result";
     }
 }
