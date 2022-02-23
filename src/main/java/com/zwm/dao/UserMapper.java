@@ -25,4 +25,7 @@ public interface UserMapper {
 
     //更新用户密码
     public abstract int updateUserPassword(int id, String password);
+
+    //查询激活码是否正确
+    public abstract User selectUserByIdAndActivationCode(int id, String activationCode);
 }
