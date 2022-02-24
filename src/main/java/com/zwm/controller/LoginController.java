@@ -1,5 +1,6 @@
 package com.zwm.controller;
 
+import com.google.code.kaptcha.Producer;
 import com.zwm.entity.User;
 import com.zwm.service.impl.UserServiceImpl;
 import com.zwm.util.CommunityConstant;
@@ -10,6 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 import static com.zwm.util.CommunityConstant.ACTIVATION_FAILURE;
@@ -20,6 +27,9 @@ public class LoginController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private Producer kaptchaProducer;
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String getRegisterPage() {
@@ -65,5 +75,23 @@ public class LoginController {
             model.addAttribute("target", "/index");//跳转返回首页
         }
         return "/site/operate-result";
+    }
+
+    //验证码功能 ---> 返回图片
+    @RequestMapping(value = "/kaptcha", method = RequestMethod.GET)
+    public void getKaptcha(HttpServletResponse httpServletResponse, HttpSession httpSession) {
+        //生成验证码
+        String text = kaptchaProducer.createText();
+        BufferedImage bufferedImage = kaptchaProducer.createImage(text);
+        //保存验证码文件到本地
+        httpSession.setAttribute("kaptcha", text);
+        //设置返回的格式
+        httpServletResponse.setContentType("image/png");
+        try {
+            OutputStream outputStream = httpServletResponse.getOutputStream();
+            ImageIO.write(bufferedImage, "png", outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
