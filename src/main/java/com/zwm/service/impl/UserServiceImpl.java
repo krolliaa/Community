@@ -1,6 +1,8 @@
 package com.zwm.service.impl;
 
+import com.zwm.dao.LoginTicketMapper;
 import com.zwm.dao.UserMapper;
+import com.zwm.entity.LoginTicket;
 import com.zwm.entity.User;
 import com.zwm.service.UserService;
 import com.zwm.util.CommunityConstant;
@@ -10,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -39,6 +43,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private TemplateEngine templateEngine;
+
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
 
     @Override
     public User findUserById(int id) {
@@ -122,10 +129,59 @@ public class UserServiceImpl implements UserService {
         } else if (user.getStatus() == 0 && user.getActivationCode().equals(activationCode)) {
             //只有状态为 0 即未激活并且激活码跟链接相同才准许激活
             int result = userMapper.updateUserStatus(id);
-            if(result == 1) return ACTIVATION_SUCCESS;
+            if (result == 1) return ACTIVATION_SUCCESS;
             else return ACTIVATION_FAILURE;
         } else {
             return ACTIVATION_FAILURE;
         }
+    }
+
+    //用户登录
+    @Override
+    public Map<String, String> login(String username, String password, int expiredSeconds) {
+        //查询用户信息[用户名是唯一的] ---> 有错误信息存放到 map
+        Map<String, String> map = new HashMap<>();
+        //验证用户名是否为空
+        if (StringUtils.isBlank(username)) {
+            map.put("usernameMsg", "账号不能为空！");
+        }
+        //验证密码是否为空
+        if (StringUtils.isBlank(password)) {
+            map.put("passwordMsg", "密码不能为空!");
+            return map;
+        }
+        User user = userMapper.selectUserByName(username);
+        //如果 user 查询没有直接返回
+        if (user == null) {
+            map.put("usernameMsg", "该账号不存在!");
+            return map;
+        }
+        //未激活账号无法使用 0-未激活 1-已激活
+        if (user.getStatus() == 0) {
+            map.put("usernameMsg", "未激活账号无法使用！");
+            return map;
+        }
+        //验证密码是否正确
+        if (user.getPassword().equals(CommunityUtils.md5(password + user.getSalt()))) {
+            map.put("passwordMsg", "密码不正确！");
+            return map;
+        }
+        //前面都顺利执行过来表示用户可以正常登录使用，制作登录凭证
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUser_id(user.getId());
+        loginTicket.setTicket(CommunityUtils.generateUUID());
+        loginTicket.setStatus(0);
+        //生存时间根据是否记住决定 ---> 这里由 LoginController 完成传递过来，Service 这边直接赋值即可
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
+        //创建登陆凭证记录存储到数据库中
+        loginTicketMapper.insertLoginTicket(loginTicket);
+        //前端 cookie 需要保存登录凭证，所以需要使用 map 传递回去
+        map.put("loginTicket", loginTicket.getTicket());
+        return map;
+    }
+
+    //用户登出 ---> 设置当前票据的状态为无效 0-有效 1-无效
+    public void logout(String ticket) {
+        loginTicketMapper.updateStatusByLoginTicket(ticket, 1);
     }
 }

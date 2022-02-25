@@ -13,4 +13,10 @@ public interface UserService {
 
     //查询激活码与账户 ID 是否正确
     public abstract CommunityConstant activation(int id, String activationCode);
+
+    //查询匹配的用户名和密码并且设置生存时间【根据用户是否选择记住我来决定生存时间的长短】
+    public abstract Map<String, String> login(String username, String password, int expiredSeconds);
+
+    //退出登录
+    public abstract void logout(String ticket);
 }

@@ -4,7 +4,9 @@ import com.google.code.kaptcha.Producer;
 import com.zwm.entity.User;
 import com.zwm.service.impl.UserServiceImpl;
 import com.zwm.util.CommunityConstant;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
@@ -21,6 +24,8 @@ import java.util.Map;
 
 import static com.zwm.util.CommunityConstant.ACTIVATION_FAILURE;
 import static com.zwm.util.CommunityConstant.ACTIVATION_SUCCESS;
+import static com.zwm.util.CommunityConstantTwo.DEFAULT_EXPIRED_SECONDS;
+import static com.zwm.util.CommunityConstantTwo.REMEMBER_EXPIRED_SECONDS;
 
 @Controller
 public class LoginController {
@@ -30,6 +35,9 @@ public class LoginController {
 
     @Autowired
     private Producer kaptchaProducer;
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String getRegisterPage() {
@@ -94,4 +102,41 @@ public class LoginController {
             e.printStackTrace();
         }
     }
+
+    //登录功能
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String userLogin(Model model, HttpServletResponse httpServletResponse, HttpSession httpSession, String username, String password, String code, boolean rememberMe) {
+        //参数分别为：数据 + 响应类型 + 会话 + 用户名 + 密码 + 验证码 + 是否记住我
+        //session保存在服务器，内置属性：kaptcha
+        String kaptcha = (String) httpSession.getAttribute("kaptcha");
+        //如果验证码为空或者不匹配直接返回到登录页面
+        if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equals(code)) {
+            model.addAttribute("codeMsg", "验证码不正确!");
+            return "/site/login";
+        }
+        //查询用户名和密码匹配的用户信息 ---> UserService
+        //设置存活时间：要么半天要么100天
+        int expiredSeconds = rememberMe ? REMEMBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
+        Map<String, String> map = userService.login(username, password, expiredSeconds);
+        //验证map，如果包含`ticket`表明账户验证通过，否则表示不通过
+        if (map.containsKey("loginTicket")) {
+            Cookie cookie = new Cookie("ticket", map.get("loginTicket").toString());
+            cookie.setPath(contextPath);
+            cookie.setMaxAge(expiredSeconds);
+            httpServletResponse.addCookie(cookie);
+            //重定向到首页
+            return "redirect:/index";
+        } else {
+            model.addAttribute("usernameMsg", map.get("usernameMsg"));
+            model.addAttribute("passwordMsg", map.get("passwordMsg"));
+            return "/site/login";
+        }
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String userLogout() {
+        return "/index";
+    }
+
+
 }
