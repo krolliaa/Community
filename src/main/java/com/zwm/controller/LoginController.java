@@ -133,6 +133,7 @@ public class LoginController {
         }
     }
 
+    //退出登录功能
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String userLogout() {
         return "/index";
