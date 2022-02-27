@@ -12,8 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -168,7 +166,7 @@ public class UserServiceImpl implements UserService {
         }
         //前面都顺利执行过来表示用户可以正常登录使用，制作登录凭证
         LoginTicket loginTicket = new LoginTicket();
-        loginTicket.setUser_id(user.getId());
+        loginTicket.setUserId(user.getId());
         loginTicket.setTicket(CommunityUtils.generateUUID());
         loginTicket.setStatus(0);
         //生存时间根据是否记住决定 ---> 这里由 LoginController 完成传递过来，Service 这边直接赋值即可
@@ -183,5 +181,10 @@ public class UserServiceImpl implements UserService {
     //用户登出 ---> 设置当前票据的状态为无效 0-有效 1-无效
     public void logout(String ticket) {
         loginTicketMapper.updateStatusByLoginTicket(ticket, 1);
+    }
+
+    //查询用户登录凭证
+    public LoginTicket selectLoginTicketByTicket(String ticket) {
+        return loginTicketMapper.selectLoginTicketByTicket(ticket);
     }
 }

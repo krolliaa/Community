@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.*;
 public interface LoginTicketMapper {
     //插入登录凭证
     @Insert({
-            "insert into login_ticket(user_id, ticket, status, expired) values(#{user_id}, #{ticket}, #{status}, #{expired})"
+            "insert into login_ticket(user_id, ticket, status, expired) values(#{userId}, #{ticket}, #{status}, #{expired})"
     })
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     public abstract int insertLoginTicket(LoginTicket loginTicket);

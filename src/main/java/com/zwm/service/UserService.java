@@ -1,5 +1,6 @@
 package com.zwm.service;
 
+import com.zwm.entity.LoginTicket;
 import com.zwm.entity.User;
 import com.zwm.util.CommunityConstant;
 
@@ -19,4 +20,7 @@ public interface UserService {
 
     //退出登录
     public abstract void logout(String ticket);
+
+    //查询用户凭证
+    public abstract LoginTicket selectLoginTicketByTicket(String ticket);
 }
