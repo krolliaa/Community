@@ -187,4 +187,10 @@ public class UserServiceImpl implements UserService {
     public LoginTicket selectLoginTicketByTicket(String ticket) {
         return loginTicketMapper.selectLoginTicketByTicket(ticket);
     }
+
+    @Override
+    //更新用户头像路径
+    public int updateUserHeaderUrl(int id, String headerUrl) {
+        return userMapper.updateUserHeader(id, headerUrl);
+    }
 }

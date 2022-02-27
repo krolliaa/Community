@@ -23,4 +23,7 @@ public interface UserService {
 
     //查询用户凭证
     public abstract LoginTicket selectLoginTicketByTicket(String ticket);
+
+    //更新用户头像路径
+    public abstract int updateUserHeaderUrl(int id, String headerUrl);
 }

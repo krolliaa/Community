@@ -21,7 +21,7 @@ public interface UserMapper {
     public abstract int updateUserStatus(int id);
 
     //更新用户头像
-    public abstract int updateUserHeader(int id, String headUrl);
+    public abstract int updateUserHeader(int id, String headerUrl);
 
     //更新用户密码
     public abstract int updateUserPassword(int id, String password);

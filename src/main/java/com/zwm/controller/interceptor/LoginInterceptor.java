@@ -43,7 +43,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         //获取当前线程的用户
         User loginUser = hostHolder.getUser();
-        if (loginUser != null && !modelAndView.isEmpty()) {
+        if (loginUser != null && modelAndView != null) {
             modelAndView.addObject("loginUser", loginUser);
         }
     }
