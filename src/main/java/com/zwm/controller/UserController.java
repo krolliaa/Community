@@ -1,5 +1,6 @@
 package com.zwm.controller;
 
+import com.zwm.annotation.LoginRequired;
 import com.zwm.entity.User;
 import com.zwm.service.impl.UserServiceImpl;
 import com.zwm.util.CommunityUtils;
@@ -41,11 +42,13 @@ public class UserController {
     @Autowired
     private HostHolder hostHolder;
 
+    @LoginRequired
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
     public String getSettingPage() {
         return "/site/setting";
     }
 
+    @LoginRequired
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {
         //如果上传文件为空就返回
