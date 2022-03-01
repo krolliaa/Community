@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/test", method = RequestMethod.GET)
+@RequestMapping(value = "/discussPost", method = RequestMethod.GET)
 public class DiscussPostController {
 
     @Autowired
@@ -65,5 +67,14 @@ public class DiscussPostController {
     public String testSensitiveWord() {
         String filterTest = sensitiveFilter.filter("赌+++++++++++++博好啊赌博好");
         return filterTest;
+    }
+
+    @RequestMapping(value = "/ajax", method = RequestMethod.POST)
+    public String testAjax(String name, Integer age, String text) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("age", age);
+        map.put("text", text);
+        return CommunityUtils.getJsonString(0, "SendSuccess", map);
     }
 }
