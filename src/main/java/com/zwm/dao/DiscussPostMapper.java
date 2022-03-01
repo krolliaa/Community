@@ -15,4 +15,7 @@ public interface DiscussPostMapper {
 
     //插入新的帖子
     public abstract int insertDiscussPost(DiscussPost discussPost);
+
+    //根据帖子id查询出帖子
+    public abstract DiscussPost selectDiscussPostById(int id);
 }

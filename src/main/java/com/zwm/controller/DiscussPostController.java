@@ -3,10 +3,13 @@ package com.zwm.controller;
 import com.zwm.entity.DiscussPost;
 import com.zwm.entity.User;
 import com.zwm.service.impl.DiscussPostServiceImpl;
+import com.zwm.service.impl.UserServiceImpl;
 import com.zwm.util.CommunityUtils;
 import com.zwm.util.HostHolder;
 import com.zwm.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -16,7 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 @RequestMapping(value = "/discuss", method = RequestMethod.GET)
 public class DiscussPostController {
 
@@ -25,6 +28,9 @@ public class DiscussPostController {
 
     @Autowired
     SensitiveFilter sensitiveFilter;
+
+    @Autowired
+    UserServiceImpl userService;
 
     @Autowired
     private HostHolder hostHolder;
@@ -104,5 +110,16 @@ public class DiscussPostController {
         discussPostService.addDiscussPost(discussPost);
         // 报错的情况,将来统一处理.
         return CommunityUtils.getJsonString(0, "发布成功!");
+    }
+
+    @RequestMapping(path = "/detail/{discussPostId}", method = RequestMethod.GET)
+    public String getDiscussPost(@PathVariable(value = "discussPostId") int discussPostId, Model model) {
+        //根据 ID 查询
+        DiscussPost discussPost = discussPostService.selectDiscussPost(discussPostId);
+        model.addAttribute("post", discussPost);
+        //查询该帖子的用户信息
+        User user = userService.findUserById(discussPost.getUserId());
+        model.addAttribute("user", user);
+        return "/site/discuss-detail";
     }
 }

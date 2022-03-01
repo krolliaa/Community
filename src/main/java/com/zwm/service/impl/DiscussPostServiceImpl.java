@@ -41,4 +41,9 @@ public class DiscussPostServiceImpl implements DiscussPostService {
         discussPost.setContent(sensitiveFilter.filter(discussPost.getContent()));
         return discussPostMapper.insertDiscussPost(discussPost);
     }
+
+    @Override
+    public DiscussPost selectDiscussPost(int id) {
+        return discussPostMapper.selectDiscussPostById(id);
+    }
 }

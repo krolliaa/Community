@@ -13,4 +13,7 @@ public interface DiscussPostService {
 
     //插入新的帖子
     public abstract int addDiscussPost(DiscussPost discussPost);
+
+    //根据帖子 ID 查询帖子
+    public abstract DiscussPost selectDiscussPost(int id);
 }
