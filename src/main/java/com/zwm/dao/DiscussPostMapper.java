@@ -12,4 +12,7 @@ public interface DiscussPostMapper {
 
     //根据 userId 分页查询状态为没有拉黑的帖子数量
     public abstract int selectDiscussPostsCount(int userId);
+
+    //插入新的帖子
+    public abstract int insertDiscussPost(DiscussPost discussPost);
 }

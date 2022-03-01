@@ -1,7 +1,10 @@
 package com.zwm.controller;
 
+import com.zwm.entity.DiscussPost;
+import com.zwm.entity.User;
 import com.zwm.service.impl.DiscussPostServiceImpl;
 import com.zwm.util.CommunityUtils;
+import com.zwm.util.HostHolder;
 import com.zwm.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/discussPost", method = RequestMethod.GET)
+@RequestMapping(value = "/discuss", method = RequestMethod.GET)
 public class DiscussPostController {
 
     @Autowired
@@ -21,6 +25,9 @@ public class DiscussPostController {
 
     @Autowired
     SensitiveFilter sensitiveFilter;
+
+    @Autowired
+    private HostHolder hostHolder;
 
     @RequestMapping(value = "/select1")
     public Object findDiscussPosts() {
@@ -76,5 +83,26 @@ public class DiscussPostController {
         map.put("age", age);
         map.put("text", text);
         return CommunityUtils.getJsonString(0, "SendSuccess", map);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public String addDiscussPost(String title, String content) {
+        //获取当前线程的账号信息
+        User user = hostHolder.getUser();
+        //如果当前没有登录用户返回未登录错误信息
+        if (user == null) {
+            return CommunityUtils.getJsonString(403, "你还没有登录哦！");
+        }
+        System.out.println(title);
+        System.out.println(content);
+        DiscussPost discussPost = new DiscussPost();
+        discussPost.setUserId(user.getId());
+        discussPost.setTitle(title);
+        discussPost.setContent(content);
+        discussPost.setCreateTime(new Date());
+        discussPostService.addDiscussPost(discussPost);
+        // 报错的情况,将来统一处理.
+        return CommunityUtils.getJsonString(0, "发布成功!");
     }
 }

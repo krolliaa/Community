@@ -79,14 +79,15 @@ public class SensitiveFilter {
             //获取文本的字符
             Character character = text.charAt(position);
             //判断是不是字符，如果是字符就跳过
-            if (isSymbol(character)) {
+            //暂时不过滤字符
+            /*if (isSymbol(character)) {
                 //如果是根节点
                 if (tempNode == rootNode) {
                     begin++;
                 }
                 position++;
                 continue;
-            }
+            }*/
             System.out.println("什么字：" + character);
             //文本字符跟节点的子节点进行比对看有是不是一样的字符
             tempNode = tempNode.getSubNode(character);
