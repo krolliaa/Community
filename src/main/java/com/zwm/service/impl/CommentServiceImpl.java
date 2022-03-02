@@ -4,9 +4,11 @@ import com.zwm.dao.CommentMapper;
 import com.zwm.entity.Comment;
 import com.zwm.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CommentServiceImpl implements CommentService {
 
     @Autowired

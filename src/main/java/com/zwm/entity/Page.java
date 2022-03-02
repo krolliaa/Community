@@ -1,8 +1,11 @@
 package com.zwm.entity;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Page {
     private int current = 1;//当前页码
-    private int limit = 10;//当前页显示上线
+    private int limit = 10;//当前页显示上限
     private int rows;//数据总数
     private String path;//查询路径
 
