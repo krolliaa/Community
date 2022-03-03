@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -135,8 +136,10 @@ public class LoginController {
 
     //退出登录功能
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String userLogout() {
-        return "/index";
+    public String userLogout(@CookieValue(value = "ticket") String ticket) {
+        userService.logout(ticket);
+        System.out.println("这是怎么一肥事");
+        return "redirect:/index";
     }
 
 
