@@ -14,4 +14,7 @@ public interface CommentMapper {
     //entityType：1-帖子评论 2-回复评论
     //entityId：发表评论的实体 Id
     public abstract int selectCountByEntity(int entityType, int entityId);
+
+    //增加评论
+    public abstract int insertComment(Comment comment);
 }

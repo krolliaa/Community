@@ -16,4 +16,7 @@ public interface DiscussPostService {
 
     //根据帖子 ID 查询帖子
     public abstract DiscussPost selectDiscussPost(int id);
+
+    //更新评论数量
+    public abstract int updateDiscussPostCommentCount(int id, int commentCount);
 }

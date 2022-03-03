@@ -10,4 +10,7 @@ public interface CommentService {
 
     //根据实体查找评论数量
     public abstract int findCountByEntity(int entityType, int entityId);
+
+    //增加帖子
+    public abstract int addComment(Comment comment);
 }
