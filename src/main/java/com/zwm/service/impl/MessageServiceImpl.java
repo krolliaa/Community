@@ -3,8 +3,10 @@ package com.zwm.service.impl;
 import com.zwm.dao.MessageMapper;
 import com.zwm.entity.Message;
 import com.zwm.service.MessageService;
+import com.zwm.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -13,6 +15,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private MessageMapper messageMapper;
+
+    @Autowired
+    private SensitiveFilter sensitiveFilter;
 
     @Override
     public List<Message> findConversations(int userId, int start, int limit) {
@@ -37,5 +42,17 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public int findLetterUnreadCount(int userId, String conversationId) {
         return messageMapper.selectLetterUnreadCount(userId, conversationId);
+    }
+
+    @Override
+    public int insertMessage(Message message) {
+        message.setContent(sensitiveFilter.filter(message.getContent()));
+        message.setContent(HtmlUtils.htmlEscape(message.getContent()));
+        return messageMapper.insertMessage(message);
+    }
+
+    @Override
+    public int updateStatus(List<Integer> ids, int status) {
+        return messageMapper.updateStatus(ids, status);
     }
 }

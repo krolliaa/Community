@@ -8,6 +8,11 @@
         ,from_id,to_id,conversation_id,content,status,create_time
     </sql>
 
+    <sql id="insertFields">
+        from_id
+        ,to_id,conversation_id,content,status,create_time
+    </sql>
+
     <!--会话中的私信不能是删除的，并且要么是发消息的是userId要么收消息的是userId并且不是系统消息-->
     <select id="selectConversations" resultType="message">
         select <include refid="selectFields"></include> from message
@@ -46,4 +51,15 @@
             and conversation_id=#{conversationId}
         </if>
     </select>
+
+    <insert id="insertMessage" parameterType="message" keyProperty="id" keyColumn="id">
+        insert into message(<include refid="insertFields"/>) values(#{fromId},#{toId},#{conversationId},#{content},#{status},#{createTime});
+    </insert>
+
+    <update id="updateStatus">
+        update message set status = #{status} where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

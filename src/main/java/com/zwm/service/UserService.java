@@ -26,4 +26,8 @@ public interface UserService {
 
     //更新用户头像路径
     public abstract int updateUserHeaderUrl(int id, String headerUrl);
+
+    //根据用户名查找用户
+    public abstract User selectUserByUsername(String username);
+
 }

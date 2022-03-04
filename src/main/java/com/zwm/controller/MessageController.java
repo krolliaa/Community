@@ -5,6 +5,7 @@ import com.zwm.entity.Page;
 import com.zwm.entity.User;
 import com.zwm.service.impl.MessageServiceImpl;
 import com.zwm.service.impl.UserServiceImpl;
+import com.zwm.util.CommunityUtils;
 import com.zwm.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class MessageController {
@@ -87,6 +86,13 @@ public class MessageController {
         }
         model.addAttribute("letters", mapList);
         model.addAttribute("target", getLetterTarget(conversationId));
+        //点开以后之前未读消息将变成已读 getLetterIds 封装专门的方法获取未读消息的 ids
+        List<Integer> unReadIds = getLetterIds(letterList);
+        //如果存在未读消息，则将未读消息设置为已读
+        if (!unReadIds.isEmpty()) {
+            messageService.updateStatus(unReadIds, 1);
+        }
+
         return "/site/letter-detail";
     }
 
@@ -101,5 +107,40 @@ public class MessageController {
         } else {
             return userService.findUserById(id0);
         }
+    }
+
+    //获取当前会话中未读消息的 id
+    private List<Integer> getLetterIds(List<Message> messageList) {
+        List<Integer> unReadIds = new ArrayList<>();
+        if (messageList != null) {
+            for (Message message : messageList) {
+                //如果当前状态为 0 表示未读消息，并且当前用户是接收方
+                if (message.getStatus() == 0 && hostHolder.getUser().getId() == message.getToId()) {
+                    unReadIds.add(message.getId());
+                }
+            }
+        }
+        return unReadIds;
+    }
+
+    @RequestMapping(path = "/letter/send", method = RequestMethod.POST)
+    @ResponseBody
+    public String sendLetter(String toName, String content) {
+        //根据用户名查找用户
+        User toUser = userService.selectUserByUsername(toName);
+        //获取收信人用户 ID
+        int toId = toUser.getId();
+        //获取当前用户的 ID
+        User fromUser = hostHolder.getUser();
+        int fromId = fromUser.getId();
+        Message message = new Message();
+        message.setContent(content);
+        message.setFromId(fromId);
+        message.setToId(toId);
+        message.setStatus(0);
+        message.setCreateTime(new Date());
+        message.setConversationId(fromId < toId ? (fromId + "_" + toId) : (toId + "_" + fromId));
+        messageService.insertMessage(message);
+        return CommunityUtils.getJsonString(0);
     }
 }
