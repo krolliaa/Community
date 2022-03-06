@@ -5,6 +5,7 @@ import com.zwm.entity.DiscussPost;
 import com.zwm.entity.Page;
 import com.zwm.entity.User;
 import com.zwm.service.impl.DiscussPostServiceImpl;
+import com.zwm.service.impl.LikeServiceImpl;
 import com.zwm.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static com.zwm.util.CommunityConstantTwo.ENTITY_TYPE_POST;
+
 @Controller
 public class HomeController {
 
@@ -35,6 +38,9 @@ public class HomeController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private LikeServiceImpl likeService;
+
     @RequestMapping(value = "/selectUser")
     @ResponseBody
     public Object findUserById() {
@@ -44,8 +50,7 @@ public class HomeController {
     @RequestMapping(path = "/index", method = RequestMethod.GET)
     public String getIndexPage(Model model, Page page) {
 
-        redisTemplate.delete(redisTemplate.keys("*"));
-
+        /*redisTemplate.delete(redisTemplate.keys("*"));
         System.out.println("----------String----------");
         String stringKey = "test:count";
         redisTemplate.opsForValue().set(stringKey, 1);
@@ -115,9 +120,7 @@ public class HomeController {
                 //提交事务
                 return redisOperations.exec();
             }
-        });
-        System.out.println(result);
-
+        });*/
         //page 需要知道总数是和路径
         page.setRows(discussPostService.findDiscussPostsCount(0));
         page.setPath("/index");
@@ -129,6 +132,9 @@ public class HomeController {
                 map.put("post", discussPost);
                 User user = userService.findUserById(discussPost.getUserId());
                 map.put("user", user);
+                //获取该帖子的点赞数量和当前用户【如果有登录的话】显示点赞状态
+                long likeCount = likeService.findLikeNumbers(ENTITY_TYPE_POST, discussPost.getId());
+                map.put("likeCount", likeCount);
                 discussPosts.add(map);
             }
         }

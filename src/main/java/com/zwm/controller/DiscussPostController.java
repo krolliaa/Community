@@ -6,6 +6,7 @@ import com.zwm.entity.Page;
 import com.zwm.entity.User;
 import com.zwm.service.impl.CommentServiceImpl;
 import com.zwm.service.impl.DiscussPostServiceImpl;
+import com.zwm.service.impl.LikeServiceImpl;
 import com.zwm.service.impl.UserServiceImpl;
 import com.zwm.util.CommunityUtils;
 import com.zwm.util.HostHolder;
@@ -41,6 +42,9 @@ public class DiscussPostController {
 
     @Autowired
     private CommentServiceImpl commentService;
+
+    @Autowired
+    private LikeServiceImpl likeService;
 
     @RequestMapping(value = "/select1")
     public Object findDiscussPosts() {
@@ -121,21 +125,25 @@ public class DiscussPostController {
 
     @RequestMapping(path = "/detail/{discussPostId}", method = RequestMethod.GET)
     public String getDiscussPost(@PathVariable(value = "discussPostId") int discussPostId, Model model, Page page) {
-        System.out.println("start：" + page.getStart());
+        //System.out.println("start：" + page.getStart());
         //根据 ID 查询
         DiscussPost discussPost = discussPostService.selectDiscussPost(discussPostId);
         model.addAttribute("post", discussPost);
         //查询该帖子的用户信息
         User user = userService.findUserById(discussPost.getUserId());
         model.addAttribute("user", user);
-
+        //获取该帖子的赞的数量
+        long likeCount = likeService.findLikeNumbers(ENTITY_TYPE_POST, discussPostId);
+        //如果当前用户不为空，验证状态，是否是已点赞的状态
+        int likeStatus = hostHolder.getUser() == null ? 0 : likeService.findLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_POST, discussPostId);
+        model.addAttribute("likeCount", likeCount);
+        model.addAttribute("likeStatus", likeStatus);
         //设置一页显示多少条数据 ---> 这里为 5 条
         page.setLimit(5);
         //设置查询路径
         page.setPath("/discuss/detail/" + discussPostId);
         //设置数据总数
         page.setRows(discussPost.getCommentCount());
-
         //首先获取帖子评论，帖子评论的标志为 entityType = 1;
         //这里可以把它抽象出来，放到常量类，这样可以直接使用常量做到见名知意
         //帖子评论类型？是哪个帖子的？显示第几条到第几条数据？
@@ -148,6 +156,11 @@ public class DiscussPostController {
                 Map<String, Object> discussPostCommentMap = new HashMap<>();
                 discussPostCommentMap.put("comment", comment);
                 discussPostCommentMap.put("user", userService.findUserById(comment.getUserId()));
+                //将帖子评论的赞放入map中以便前端获取数据
+                long discussPostCommentLikeCount = likeService.findLikeNumbers(ENTITY_TYPE_COMMENT, comment.getId());
+                int discussPostCommentLikeStatus = hostHolder.getUser() == null ? 0 : likeService.findLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_COMMENT, comment.getId());
+                discussPostCommentMap.put("likeCount", discussPostCommentLikeCount);
+                discussPostCommentMap.put("likeStatus", discussPostCommentLikeStatus);
                 //整个帖子评论的的回复数量为
                 int replyCount = commentService.findCountByEntity(ENTITY_TYPE_COMMENT, comment.getId());
                 discussPostCommentMap.put("replyCount", replyCount);
@@ -167,6 +180,11 @@ public class DiscussPostController {
                         //回复的目标
                         User target = replyCommentsComment.getTargetId() == 0 ? null : userService.findUserById(replyCommentsComment.getTargetId());
                         commentCommentMap.put("target", target);
+                        //将帖子评论的赞放入map中以便前端获取数据
+                        long replyCommentsCommentLikeCount = likeService.findLikeNumbers(ENTITY_TYPE_COMMENT, replyCommentsComment.getId());
+                        int replyCommentsCommentLikeStatus = hostHolder.getUser() == null ? 0 : likeService.findLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_COMMENT, replyCommentsComment.getId());
+                        commentCommentMap.put("likeCount", replyCommentsCommentLikeCount);
+                        commentCommentMap.put("likeStatus", replyCommentsCommentLikeStatus);
                         replyCommentsCommentMapList.add(commentCommentMap);
                     }
                 }
