@@ -65,15 +65,15 @@ public class FollowServiceImpl implements FollowService {
         return redisTemplate.opsForZSet().size(followerKey);
     }
 
-    //查询某个用户的关注者个数
-    public long followeeCount(int userId, int entityId) {
-        String followeeKey = RedisKeyUtil.getFollowerKey(userId, entityId);
+    //查询某个用户的关注个数
+    public long followeeCount(int userId, int entityType) {
+        String followeeKey = RedisKeyUtil.getFolloweeKey(userId, entityType);
         return redisTemplate.opsForZSet().size(followeeKey);
     }
 
     //查询当前用户是否已关注当前实体
-    public boolean hasFollow(int userId, int entityType, int entityId) {
-        System.out.println(redisTemplate.opsForZSet().zCard(RedisKeyUtil.getFolloweeKey(userId, entityType)) == null ? "null" : redisTemplate.opsForZSet().zCard(RedisKeyUtil.getFolloweeKey(userId, entityType)));
-        return redisTemplate.opsForZSet().zCard(RedisKeyUtil.getFolloweeKey(userId, entityType)) != null ? true : false;
+    public boolean hasFollowed(int userId, int entityType, int entityId) {
+        System.out.println(redisTemplate.opsForZSet().score(RedisKeyUtil.getFolloweeKey(userId, entityType), entityId) == null ? "null" : redisTemplate.opsForZSet().zCard(RedisKeyUtil.getFolloweeKey(userId, entityType)));
+        return redisTemplate.opsForZSet().score(RedisKeyUtil.getFolloweeKey(userId, entityType), entityId) != null ? true : false;
     }
 }

@@ -24,7 +24,6 @@ public class FollowController {
     public String follow(int entityType, int entityId) {
         //当前用户关注了某人
         User user = hostHolder.getUser();
-        System.out.println("什么鬼啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊");
         followService.follow(user.getId(), entityType, entityId);
         return CommunityUtils.getJsonString(0, "已关注");
     }

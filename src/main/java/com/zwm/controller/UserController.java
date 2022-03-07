@@ -2,6 +2,7 @@ package com.zwm.controller;
 
 import com.zwm.annotation.LoginRequired;
 import com.zwm.entity.User;
+import com.zwm.service.impl.FollowServiceImpl;
 import com.zwm.service.impl.LikeServiceImpl;
 import com.zwm.service.impl.UserServiceImpl;
 import com.zwm.util.CommunityUtils;
@@ -20,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+
+import static com.zwm.util.CommunityConstantTwo.ENTITY_TYPE_USER;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -44,6 +47,9 @@ public class UserController {
 
     @Autowired
     private LikeServiceImpl likeService;
+
+    @Autowired
+    private FollowServiceImpl followService;
 
     @LoginRequired
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
@@ -136,6 +142,18 @@ public class UserController {
         //获取当前用户收到的点赞数量
         int likeCount = likeService.findUserLikeNumbers(userId);
         model.addAttribute("likeCount", likeCount);
+        //判断该用户是否已经被关注 ---> 用户是 3
+        boolean hasFollowed = false;
+        if (hostHolder.getUser() != null) {
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
+        }
+        model.addAttribute("hasFollowed", hasFollowed);
+        //传递粉丝数量
+        long followerCount = followService.followerCount(ENTITY_TYPE_USER, user.getId());
+        model.addAttribute("followerCount", followerCount);
+        //传递关注数量
+        long followeeCount = followService.followeeCount(user.getId(), ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount", followeeCount);
         return "/site/profile";
     }
 }

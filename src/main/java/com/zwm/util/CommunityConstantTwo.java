@@ -12,4 +12,7 @@ public interface CommunityConstantTwo {
 
     //评论为回复评论的类型
     int ENTITY_TYPE_COMMENT = 2;
+
+    //实体为用户类型
+    int ENTITY_TYPE_USER = 3;
 }

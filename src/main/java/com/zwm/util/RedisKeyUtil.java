@@ -25,12 +25,12 @@ public class RedisKeyUtil {
 
     //获取关注 ---> 某个用户关注了某个类型的实体 ---> value 为实体 id
     public static String getFolloweeKey(int userId, int entityType) {
-        return PREFIX_FOLLOWER + SPLIT + userId + SPLIT + entityType;
+        return PREFIX_FOLLOWEE + SPLIT + userId + SPLIT + entityType;
     }
 
     //获取粉丝 ---> 实体类型和实体 Id 可以唯一确定一个 实体
     public static String getFollowerKey(int entityType, int entityId) {
-        return PREFIX_FOLLOWEE + SPLIT + entityType + SPLIT + entityId;
+        return PREFIX_FOLLOWER + SPLIT + entityType + SPLIT + entityId;
     }
 
     //生成验证码Key
