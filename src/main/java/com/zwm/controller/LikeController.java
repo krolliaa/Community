@@ -5,7 +5,6 @@ import com.zwm.entity.User;
 import com.zwm.service.impl.LikeServiceImpl;
 import com.zwm.util.CommunityUtils;
 import com.zwm.util.HostHolder;
-import com.zwm.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +27,9 @@ public class LikeController {
     @RequestMapping(value = "/like", method = RequestMethod.POST)
     @ResponseBody
     @LoginRequired
-    public String like(int entityType, int entityId) {
+    public String like(int entityType, int entityId, int entityUserId) {
         User user = hostHolder.getUser();
-        likeService.like(user.getId(), entityType, entityId);
+        likeService.like(user.getId(), entityType, entityId, entityUserId);
         //更新点赞数量
         long likeNumbers = likeService.findLikeNumbers(entityType, entityId);
         //更新点赞状态

@@ -2,6 +2,7 @@ package com.zwm.controller;
 
 import com.zwm.annotation.LoginRequired;
 import com.zwm.entity.User;
+import com.zwm.service.impl.LikeServiceImpl;
 import com.zwm.service.impl.UserServiceImpl;
 import com.zwm.util.CommunityUtils;
 import com.zwm.util.HostHolder;
@@ -15,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +41,9 @@ public class UserController {
 
     @Autowired
     private HostHolder hostHolder;
+
+    @Autowired
+    private LikeServiceImpl likeService;
 
     @LoginRequired
     @RequestMapping(value = "/setting", method = RequestMethod.GET)
@@ -124,4 +127,15 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable(value = "userId") int userId, Model model) {
+        //判断该 userId 的用户是否存在，防止恶意用户
+        User user = userService.findUserById(userId);
+        if (user == null) throw new RuntimeException("该用户不存在");
+        model.addAttribute("user", user);
+        //获取当前用户收到的点赞数量
+        int likeCount = likeService.findUserLikeNumbers(userId);
+        model.addAttribute("likeCount", likeCount);
+        return "/site/profile";
+    }
 }
