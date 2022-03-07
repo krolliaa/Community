@@ -1,5 +1,6 @@
 package com.zwm.service.impl;
 
+import com.zwm.entity.User;
 import com.zwm.service.FollowService;
 import com.zwm.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,18 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
+
+import static com.zwm.util.CommunityConstantTwo.ENTITY_TYPE_USER;
+
 @Service
 public class FollowServiceImpl implements FollowService {
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    private UserServiceImpl userService;
 
     //完成关注功能 ---> userId 关注类型为 entityType 的 entityId
     //因为某个用户关注了另外一个用户，需要完成 followee 和 follower 两个，这两个是捆绑在一起的，需要使用事务
@@ -76,4 +84,53 @@ public class FollowServiceImpl implements FollowService {
         System.out.println(redisTemplate.opsForZSet().score(RedisKeyUtil.getFolloweeKey(userId, entityType), entityId) == null ? "null" : redisTemplate.opsForZSet().zCard(RedisKeyUtil.getFolloweeKey(userId, entityType)));
         return redisTemplate.opsForZSet().score(RedisKeyUtil.getFolloweeKey(userId, entityType), entityId) != null ? true : false;
     }
+
+    //获取关注列表 ---> 支持分页
+    public List<Map<String, Object>> getFolloweeUsersList(int userId, int start, int limit) {
+        String followeeKey = RedisKeyUtil.getFolloweeKey(userId, ENTITY_TYPE_USER);
+        //分页获取所有关注的人的 user_id
+        Set<Integer> followeeZSet = redisTemplate.opsForZSet().reverseRange(followeeKey, start, limit - 1);
+        //判断到底有没有关注人即有无关注的人
+        if (followeeZSet == null) {
+            return null;
+        } else {
+            //如果有关注列表，需要往集合中放 User 用户，还要放置关注时间，所以这里用 map 来存储
+            //最后将 Map 放入到整个 List 集合中
+            List<Map<String, Object>> followeeList = new ArrayList<>();
+            for (Integer followeeUserId : followeeZSet) {
+                Map<String, Object> followeeMap = new HashMap<>();
+                User user = userService.findUserById(followeeUserId);
+                //放入用户
+                followeeMap.put("user", user);
+                //放入关注时间
+                Double followeeTime = redisTemplate.opsForZSet().score(followeeKey, followeeUserId);
+                followeeMap.put("followTime", new Date(followeeTime.longValue()));
+                followeeList.add(followeeMap);
+            }
+            return followeeList;
+        }
+    }
+
+    //获取粉丝列表 ---> 支持分页
+    public List<Map<String, Object>> getFollowerUsersList(int userId, int start, int limit) {
+        String followerKey = RedisKeyUtil.getFollowerKey(ENTITY_TYPE_USER, userId);
+        //获取粉丝列表的集合
+        Set<Integer> followerUserIds = redisTemplate.opsForZSet().reverseRange(followerKey, start, limit - 1);
+        if (followerKey == null) {
+            return null;
+        } else {
+            List<Map<String, Object>> followerList = new ArrayList<>();
+            for (Integer followerUserId : followerUserIds) {
+                Map<String, Object> followerMap = new HashMap<>();
+                User user = userService.findUserById(followerUserId);
+                followerMap.put("user", user);
+                //获取成为粉丝的时间
+                Double followerTime = redisTemplate.opsForZSet().score(followerKey, followerUserId);
+                followerMap.put("followTime", new Date(followerTime.longValue()));
+                followerList.add(followerMap);
+            }
+            return followerList;
+        }
+    }
+
 }
