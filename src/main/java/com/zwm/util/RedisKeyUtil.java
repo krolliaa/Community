@@ -6,6 +6,7 @@ public class RedisKeyUtil {
     private static final String PREFIX_USER_LIKE = "like:user";
     private static final String PREFIX_FOLLOWER = "follower";
     private static final String PREFIX_FOLLOWEE = "followee";
+    private static final String PREFIX_KAPTCHA = "kaptcha";
 
     //某个实体的赞，包括帖子的赞和评论的赞，传入实体类型判断是帖子还是评论的赞，传入实体ID判断是哪个帖子或者哪个评论
     //用一个集合，因为集合是无序不重复的，当存入 userId 的时候表示某个 id 为 userId 的用户给该实体点了个赞
@@ -29,5 +30,10 @@ public class RedisKeyUtil {
     //获取粉丝 ---> 实体类型和实体 Id 可以唯一确定一个 实体
     public static String getFollowerKey(int entityType, int entityId) {
         return PREFIX_FOLLOWEE + SPLIT + entityType + SPLIT + entityId;
+    }
+
+    //生成验证码Key
+    public static String getKaptchaKey(String owner) {
+        return PREFIX_KAPTCHA + SPLIT + owner;
     }
 }
