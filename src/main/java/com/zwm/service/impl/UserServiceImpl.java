@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static com.zwm.util.CommunityConstant.*;
 
@@ -52,8 +53,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserById(int id) {
-        System.out.println("111");
-        return userMapper.selectUserById(id);
+        //return userMapper.selectUserById(id);
+        return getUserCache(id);
     }
 
     @Override
@@ -214,5 +215,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selectUserByUsername(String username) {
         return userMapper.selectUserByName(username);
+    }
+
+    //获取缓存中的用户数据
+    public User getUserCache(int userId) {
+        String userKey = RedisKeyUtil.getUserKey(userId);
+        //如果 userKey 从 Redis 搜出来的用户为空表示没有缓存，需从数据库中拿过来缓存
+        User user = (User) redisTemplate.opsForValue().get(userKey);
+        if (user == null) {
+            user = userMapper.selectUserById(userId);
+            redisTemplate.opsForValue().set(userKey, user, 3600, TimeUnit.SECONDS);
+        }
+        return user;
+    }
+
+    //当 User 舒心更改时清楚缓存
+    public void deleteUserCache(int userId) {
+        String userKey = RedisKeyUtil.getUserKey(userId);
+        redisTemplate.delete(userKey);
     }
 }
