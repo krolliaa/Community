@@ -8,9 +8,11 @@ import com.zwm.service.UserService;
 import com.zwm.util.CommunityConstant;
 import com.zwm.util.CommunityUtils;
 import com.zwm.util.MailServer;
+import com.zwm.util.RedisKeyUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -44,6 +46,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @Override
     public User findUserById(int id) {
@@ -172,7 +177,13 @@ public class UserServiceImpl implements UserService {
         //生存时间根据是否记住决定 ---> 这里由 LoginController 完成传递过来，Service 这边直接赋值即可
         loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
         //创建登陆凭证记录存储到数据库中
-        loginTicketMapper.insertLoginTicket(loginTicket);
+        //loginTicketMapper.insertLoginTicket(loginTicket);
+
+        //获取登录凭证的 Key
+        String ticketKey = RedisKeyUtil.getLoginTicketKey(loginTicket.getTicket());
+        redisTemplate.opsForValue().set(ticketKey, loginTicket);
+
+
         //前端 cookie 需要保存登录凭证，所以需要使用 map 传递回去
         map.put("loginTicket", loginTicket.getTicket());
         return map;
@@ -180,12 +191,18 @@ public class UserServiceImpl implements UserService {
 
     //用户登出 ---> 设置当前票据的状态为无效 0-有效 1-无效
     public void logout(String ticket) {
-        loginTicketMapper.updateStatusByLoginTicket(ticket, 1);
+        //loginTicketMapper.updateStatusByLoginTicket(ticket, 1);
+        String ticketKey = RedisKeyUtil.getLoginTicketKey(ticket);
+        LoginTicket loginTicket = (LoginTicket) redisTemplate.opsForValue().get(ticketKey);
+        loginTicket.setStatus(1);
+        redisTemplate.opsForValue().set(ticketKey, loginTicket);
     }
 
     //查询用户登录凭证
     public LoginTicket selectLoginTicketByTicket(String ticket) {
-        return loginTicketMapper.selectLoginTicketByTicket(ticket);
+        String loginTicketKey = RedisKeyUtil.getLoginTicketKey(ticket);
+        //return loginTicketMapper.selectLoginTicketByTicket(ticket);
+        return (LoginTicket) redisTemplate.opsForValue().get(loginTicketKey);
     }
 
     @Override
