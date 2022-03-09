@@ -15,4 +15,13 @@ public interface CommunityConstantTwo {
 
     //实体为用户类型
     int ENTITY_TYPE_USER = 3;
+
+    //生产者生产评论类型 ---> 实则为系统发送评论通知
+    String TOPIC_COMMENT = "comment";
+
+    //生产者生产点赞类型
+    String TOPIC_LIKE = "like";
+
+    //生产者生产关注类型
+    String TOPIC_FOLLOW = "follow";
 }

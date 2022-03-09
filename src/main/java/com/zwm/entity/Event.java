@@ -3,7 +3,7 @@ package com.zwm.entity;
 import java.util.Map;
 
 public class Event {
-    private String topic; //区分类型
+    private String topic; //区分类型 ---> CommunityConstantTwo
     private int userId; //是谁评论点赞关注了
     private int entityType; //评论点赞关注的实体类型
     private int entityId; //评论点赞关注的实体id
@@ -45,6 +45,15 @@ public class Event {
 
     public Event setEntityId(int entityId) {
         this.entityId = entityId;
+        return this;
+    }
+
+    public int getEntityUserId() {
+        return entityUserId;
+    }
+
+    public Event setEntityUserId(int entityUserId) {
+        this.entityUserId = entityUserId;
         return this;
     }
 

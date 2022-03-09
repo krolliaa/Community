@@ -12,7 +12,7 @@ public class EventProducer {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
-    //触发事件
+    //生产者生产消息
     public void fireEvent(Event event) {
         kafkaTemplate.send(event.getTopic(), JSONObject.toJSON(event));
     }
