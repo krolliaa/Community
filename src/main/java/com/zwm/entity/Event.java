@@ -4,9 +4,10 @@ import java.util.Map;
 
 public class Event {
     private String topic; //区分类型
-    private int userId; //评论点赞关注了哪个用户
+    private int userId; //是谁评论点赞关注了
     private int entityType; //评论点赞关注的实体类型
     private int entityId; //评论点赞关注的实体id
+    private int entityUserId; //评论点赞关注了哪个用户
     private Map<String, Object> data; //后续可能有其它数据都可以放到 Map 中去
 
     //增添 Getter 和 Setter 方法支持链式编程并对 Map 做一个小改动
