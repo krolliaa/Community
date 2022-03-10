@@ -1,7 +1,9 @@
 package com.zwm.controller;
 
+import com.zwm.entity.Event;
 import com.zwm.entity.Page;
 import com.zwm.entity.User;
+import com.zwm.event.EventProducer;
 import com.zwm.service.impl.FollowServiceImpl;
 import com.zwm.service.impl.UserServiceImpl;
 import com.zwm.util.CommunityUtils;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.zwm.util.CommunityConstantTwo.ENTITY_TYPE_USER;
+import static com.zwm.util.CommunityConstantTwo.TOPIC_FOLLOW;
 
 @Controller
 public class FollowController {
@@ -30,6 +33,9 @@ public class FollowController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     //点击关注
     @RequestMapping(value = "/follow", method = RequestMethod.POST)
     @ResponseBody
@@ -37,6 +43,16 @@ public class FollowController {
         //当前用户关注了某人
         User user = hostHolder.getUser();
         followService.follow(user.getId(), entityType, entityId);
+
+        //系统发送通知给被关注人 ---> 目标用户就是 entityId
+        Event event = new Event();
+        event.setTopic(TOPIC_FOLLOW)
+                .setUserId(user.getId())
+                .setEntityType(entityType)
+                .setEntityId(entityId)
+                .setEntityUserId(entityId);
+        eventProducer.fireEvent(event);
+
         return CommunityUtils.getJsonString(0, "已关注");
     }
 

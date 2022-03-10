@@ -30,8 +30,11 @@ public class ServiceLogAspect {
         //在目标方法执行前执行
         //1.获取用户IP
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
-        String ip = httpServletRequest.getRemoteHost();
+        String ip = "";
+        if(servletRequestAttributes != null && servletRequestAttributes.getRequest() != null){
+            HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
+            ip = httpServletRequest.getRemoteHost();
+        }
         //2.获取访问时间
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         //3.获取用户调用的组件方法 ---> 类名.方法名
