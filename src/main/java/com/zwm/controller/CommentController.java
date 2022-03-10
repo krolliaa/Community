@@ -51,7 +51,8 @@ public class CommentController {
         event.setTopic(TOPIC_COMMENT)
                 .setUserId(user.getId())
                 .setEntityType(comment.getEntityType())
-                .setEntityId(comment.getEntityId());
+                .setEntityId(comment.getEntityId())
+                .setData("postId", discussPostId);
         //这里需要根据实体类型：帖子还是评论，获取该帖子/评论的主人信息
         if (comment.getEntityType() == ENTITY_TYPE_POST) {
             //根据当前 entityId 也就是帖子编号查找到帖子，从而获取 userId 主人 id 编号

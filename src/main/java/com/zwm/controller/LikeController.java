@@ -42,7 +42,7 @@ public class LikeController {
     @RequestMapping(value = "/like", method = RequestMethod.POST)
     @ResponseBody
     @LoginRequired
-    public String like(int entityType, int entityId, int entityUserId) {
+    public String like(int entityType, int entityId, int entityUserId, int postId) {
         User user = hostHolder.getUser();
         likeService.like(user.getId(), entityType, entityId, entityUserId);
         //更新点赞数量
@@ -61,7 +61,8 @@ public class LikeController {
                     .setUserId(user.getId())
                     .setEntityType(entityType)
                     .setEntityId(entityId)
-                    .setEntityUserId(entityUserId);
+                    .setEntityUserId(entityUserId)
+                    .setData("postId", postId);
             //触发点赞
             eventProducer.fireEvent(event);
         }
