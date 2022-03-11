@@ -13,4 +13,6 @@ public interface CommentService {
 
     //增加帖子
     public abstract int addComment(Comment comment);
+
+    public abstract Comment findCommentById(int id);
 }

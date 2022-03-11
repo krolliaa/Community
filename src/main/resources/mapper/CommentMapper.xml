@@ -24,6 +24,13 @@
         limit #{start}, #{end}
     </select>
 
+    <select id="selectCommentById" resultType="comment">
+        select
+        <include refid="selectFields"/>
+        from comment
+        where id = #{id}
+    </select>
+
     <select id="selectCountByEntity" resultType="java.lang.Integer">
         select count(id)
         from comment

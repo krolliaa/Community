@@ -27,4 +27,16 @@ public interface MessageMapper {
 
     //修改私信状态 ---> 一个会话里头有多个私信，一旦打开会话需要将该会话中的所有私信都设置为已读
     public abstract int updateStatus(List<Integer> ids, int status);
+
+    //查询某个类型最新的系统通知
+    public abstract Message selectLatestNotice(int userId, String topic);
+
+    //查询某个类型所包含的系统通知数量
+    public abstract int selectNoticeCount(int userId, String topic);
+
+    //查询某个类型所包含的未读通知的数量 不传入类型时代表的是总数
+    public abstract int selectUnreadNoticeCount(int userId, String topic);
+
+    //查询某个类型的所有系统通知 ---> 分页查询
+    public abstract List<Message> selectNotices(int userId, String topic, int start, int limit);
 }

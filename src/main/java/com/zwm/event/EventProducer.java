@@ -14,6 +14,6 @@ public class EventProducer {
 
     //生产者生产消息
     public void fireEvent(Event event) {
-        kafkaTemplate.send(event.getTopic(), JSONObject.toJSON(event));
+        kafkaTemplate.send(event.getTopic(), JSONObject.toJSONString(event));
     }
 }

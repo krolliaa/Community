@@ -17,4 +17,7 @@ public interface CommentMapper {
 
     //增加评论
     public abstract int insertComment(Comment comment);
+
+    //查找评论
+    public abstract Comment selectCommentById(int id);
 }

@@ -45,4 +45,8 @@ public class CommentServiceImpl implements CommentService {
         discussPostService.updateDiscussPostCommentCount(comment.getEntityId(), counts);
         return row;
     }
+
+    public Comment findCommentById(int id) {
+        return commentMapper.selectCommentById(id);
+    }
 }
