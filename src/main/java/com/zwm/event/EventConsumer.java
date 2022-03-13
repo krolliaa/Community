@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zwm.entity.Event;
 import com.zwm.entity.Message;
-import com.zwm.service.MessageService;
 import com.zwm.service.impl.MessageServiceImpl;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import java.util.IdentityHashMap;
 
 import java.util.Date;
 import java.util.HashMap;
