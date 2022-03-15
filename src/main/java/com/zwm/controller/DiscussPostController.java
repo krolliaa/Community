@@ -50,20 +50,6 @@ public class DiscussPostController {
     @Autowired
     private LikeServiceImpl likeService;
 
-    @Autowired
-    private DiscussPostMapper discussPostMapper;
-
-    @Autowired
-    private DiscussPostRepository discussPostRepository;
-
-    @RequestMapping(value = "/testES")
-    public void testES() {
-        System.out.println(discussPostMapper.selectDiscussPostById(241));
-        System.out.println(discussPostMapper.selectDiscussPostById(242));
-        System.out.println(discussPostMapper.selectDiscussPostById(243));
-    }
-
-
     @RequestMapping(value = "/select1")
     public Object findDiscussPosts() {
         return discussPostService.findDiscussPosts(1, 0, 10);
