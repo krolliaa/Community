@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "discusspost", indexStoreType = "_doc", shards = 6, replicas = 3)
+@Document(indexName = "discusspost", shards = 6, replicas = 3)
 public class DiscussPost {
     @Id
     private int id;//帖子ID

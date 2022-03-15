@@ -1,5 +1,7 @@
 package com.zwm.controller;
 
+import com.zwm.dao.DiscussPostMapper;
+import com.zwm.dao.elasticsearch.DiscussPostRepository;
 import com.zwm.entity.Comment;
 import com.zwm.entity.DiscussPost;
 import com.zwm.entity.Page;
@@ -12,10 +14,12 @@ import com.zwm.util.CommunityUtils;
 import com.zwm.util.HostHolder;
 import com.zwm.util.SensitiveFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,6 +49,20 @@ public class DiscussPostController {
 
     @Autowired
     private LikeServiceImpl likeService;
+
+    @Autowired
+    private DiscussPostMapper discussPostMapper;
+
+    @Autowired
+    private DiscussPostRepository discussPostRepository;
+
+    @RequestMapping(value = "/testES")
+    public void testES() {
+        System.out.println(discussPostMapper.selectDiscussPostById(241));
+        System.out.println(discussPostMapper.selectDiscussPostById(242));
+        System.out.println(discussPostMapper.selectDiscussPostById(243));
+    }
+
 
     @RequestMapping(value = "/select1")
     public Object findDiscussPosts() {
