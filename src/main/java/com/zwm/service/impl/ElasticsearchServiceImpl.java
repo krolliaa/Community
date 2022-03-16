@@ -1,6 +1,5 @@
 package com.zwm.service.impl;
 
-import com.zwm.dao.DiscussPostMapper;
 import com.zwm.dao.elasticsearch.DiscussPostRepository;
 import com.zwm.entity.DiscussPost;
 import com.zwm.service.ElasticsearchService;
@@ -71,9 +70,9 @@ public class ElasticsearchServiceImpl implements ElasticsearchService {
                     DiscussPost discussPost = new DiscussPost();
                     discussPost.setId(Integer.valueOf(searchHit.getSourceAsMap().get("id").toString()));
                     discussPost.setUserId(Integer.valueOf(searchHit.getSourceAsMap().get("userId").toString()));
-                    discussPost.setUserId(Integer.valueOf(searchHit.getSourceAsMap().get("status").toString()));
+                    discussPost.setStatus(Integer.valueOf(searchHit.getSourceAsMap().get("status").toString()));
                     discussPost.setTitle(searchHit.getSourceAsMap().get("title").toString());
-                    discussPost.setTitle(searchHit.getSourceAsMap().get("content").toString());
+                    discussPost.setContent(searchHit.getSourceAsMap().get("content").toString());
                     discussPost.setCreateTime(new Date(Long.valueOf(searchHit.getSourceAsMap().get("createTime").toString())));
                     discussPost.setCommentCount(Integer.valueOf(searchHit.getSourceAsMap().get("commentCount").toString()));
                     //处理高亮结果

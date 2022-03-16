@@ -17,7 +17,7 @@ import java.util.Date;
 public class DiscussPost {
     @Id
     private int id;//帖子ID
-    @Field(type = FieldType.Integer)
+    @Field(type = FieldType.Long)
     private int userId;//用户ID
     @Field(type = FieldType.Text, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String title;//帖子标题
@@ -32,7 +32,7 @@ public class DiscussPost {
     @Field(type = FieldType.Date)
     private Date createTime;//帖子创建日期
     @Field(type = FieldType.Double)
-    private Double score;//帖子获得的分数
+    private double score;//帖子获得的分数
 
     @Override
     public String toString() {

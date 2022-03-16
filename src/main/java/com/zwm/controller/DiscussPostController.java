@@ -2,10 +2,8 @@ package com.zwm.controller;
 
 import com.zwm.dao.DiscussPostMapper;
 import com.zwm.dao.elasticsearch.DiscussPostRepository;
-import com.zwm.entity.Comment;
-import com.zwm.entity.DiscussPost;
-import com.zwm.entity.Page;
-import com.zwm.entity.User;
+import com.zwm.entity.*;
+import com.zwm.event.EventProducer;
 import com.zwm.service.impl.CommentServiceImpl;
 import com.zwm.service.impl.DiscussPostServiceImpl;
 import com.zwm.service.impl.LikeServiceImpl;
@@ -25,8 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
-import static com.zwm.util.CommunityConstantTwo.ENTITY_TYPE_COMMENT;
-import static com.zwm.util.CommunityConstantTwo.ENTITY_TYPE_POST;
+import static com.zwm.util.CommunityConstantTwo.*;
 
 @Controller
 @RequestMapping(value = "/discuss", method = RequestMethod.GET)
@@ -49,6 +46,9 @@ public class DiscussPostController {
 
     @Autowired
     private LikeServiceImpl likeService;
+
+    @Autowired
+    private EventProducer eventProducer;
 
     @RequestMapping(value = "/select1")
     public Object findDiscussPosts() {
@@ -122,7 +122,15 @@ public class DiscussPostController {
         discussPost.setTitle(title);
         discussPost.setContent(content);
         discussPost.setCreateTime(new Date());
+        //这里就是发布帖子的逻辑
         discussPostService.addDiscussPost(discussPost);
+
+        Event event = new Event();
+        event.setTopic(TOPIC_PUBLISH).setUserId(user.getId()).setEntityType(ENTITY_TYPE_POST).setEntityId(discussPost.getId());
+        eventProducer.fireEvent(event);
+
+
+
         // 报错的情况,将来统一处理.
         return CommunityUtils.getJsonString(0, "发布成功!");
     }

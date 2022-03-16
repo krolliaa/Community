@@ -25,6 +25,9 @@ public interface CommunityConstantTwo {
     //生产者生产关注类型
     String TOPIC_FOLLOW = "follow";
 
+    //生产者生产帖子发布到ES类型
+    String TOPIC_PUBLISH = "publish";
+
     //规定 userId = 1 为系统用户
     int SYSTEM_USER_ID = 1;
 }
