@@ -4,15 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zwm.dao.DiscussPostMapper">
     <sql id="selectFields">
-        id, user_id, title, content, type, status, comment_count, create_time, score
+        id
+        , user_id, title, content, type, status, comment_count, create_time, score
     </sql>
 
     <sql id="insertFields">
-        user_id, title, content, type, status, comment_count, create_time, score
+        user_id
+        , title, content, type, status, comment_count, create_time, score
     </sql>
 
     <select id="selectDiscussPosts" resultType="discussPost">
-        select <include refid="selectFields"/>
+        select
+        <include refid="selectFields"/>
         from discuss_post
         where status != 2
         <if test="userId != 0">and user_id = #{userId}</if>
@@ -26,15 +29,20 @@
         <if test="userId != 0">and user_id = #{userId}</if>
     </select>
 
-    <insert id="insertDiscussPost">
-        insert into discuss_post(<include refid="insertFields"/>) values(#{userId}, #{title}, #{content}, #{type}, #{status}, #{commentCount}, #{createTime}, #{score})
+    <insert id="insertDiscussPost" parameterType="discussPost" keyProperty="id">
+        insert into discuss_post(<include refid="insertFields"/>) values(#{userId}, #{title}, #{content}, #{type},
+        #{status}, #{commentCount}, #{createTime}, #{score})
     </insert>
 
     <select id="selectDiscussPostById" resultType="discussPost">
-        select <include refid="selectFields"/> from discuss_post where id = #{id}
+        select
+        <include refid="selectFields"/>
+        from discuss_post where id = #{id}
     </select>
-    
+
     <update id="updateDiscussPostCommentCount">
-        update discuss_post set comment_count = #{commentCount} where id = #{id}
+        update discuss_post
+        set comment_count = #{commentCount}
+        where id = #{id}
     </update>
 </mapper>
