@@ -37,9 +37,9 @@ public class RedisTest {
         String redisKey2 = "test:hyperloglog:redisKey2";
         String redisKey3 = "test:hyperloglog:redisKey3";
         String redisKeyUnion = "test:hyperloglog:redisKeyUnion";
-        for (int i = 1; i <= 10; i++) redisTemplate.opsForHyperLogLog().add(redisKey1, i);
-        for (int i = 11; i <= 20; i++) redisTemplate.opsForHyperLogLog().add(redisKey2, i);
-        for (int i = 21; i <= 30; i++) redisTemplate.opsForHyperLogLog().add(redisKey3, i);
+        redisTemplate.opsForHyperLogLog().add(redisKey1, 1);
+        redisTemplate.opsForHyperLogLog().add(redisKey2, 2);
+        redisTemplate.opsForHyperLogLog().add(redisKey3, 3);
         redisTemplate.opsForHyperLogLog().union(redisKeyUnion, redisKey1, redisKey2, redisKey3);
         System.out.println(redisTemplate.opsForHyperLogLog().size(redisKeyUnion));
     }
