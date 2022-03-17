@@ -64,7 +64,7 @@ public class DataServiceImpl implements DataService {
         }
         //统计，将redisUVKeyList中的数据合并到redisUVAllKey中
         redisTemplate.opsForHyperLogLog().union(redisUVAllKey, redisUVKeyList.toArray());
-        return redisTemplate.opsForHyperLogLog().size();
+        return redisTemplate.opsForHyperLogLog().size(redisUVAllKey);
     }
 
     @Override
