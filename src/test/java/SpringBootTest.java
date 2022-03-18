@@ -33,7 +33,6 @@ public class SpringBootTest {
     @Before
     public void before() {
         System.out.println("before");
-
         // 初始化测试数据
         data = new DiscussPost();
         data.setUserId(111);
@@ -72,7 +71,6 @@ public class SpringBootTest {
     public void testUpdateScore() {
         int rows = discussPostService.updateDiscussPostCommentCount(data.getId(), 2000);
         Assert.assertEquals(1, rows);
-
         DiscussPost post = discussPostService.selectDiscussPost(data.getId());
         Assert.assertEquals(2000.00, post.getScore());
     }
